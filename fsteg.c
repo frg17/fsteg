@@ -48,11 +48,13 @@ unsigned char*  read(char* filename, int *width, int *height) {
 	int n;
 	unsigned char *data = stbi_load(filename, width, height, &n, CHANNELS);
 
-	if(data == NULL || n < CHANNELS) {
+	if(data == NULL || n < CHANNELS - 1 /* Must have at least RGB */) {
+		printf("%i\n", n);
+		printf("Reading: \"%s\" failed. Code: %i", filename, n);
 		return NULL;
 	}
 
-	printf("%s\n", "Reading original image.");
+	printf("%s\n", "Read original image.");
 	return data;
 }
 
@@ -124,7 +126,7 @@ char* decode(struct Pixel* pixels,  int width, int height) {
 int main(int argc, char* argv[]) {
 	if (argc < 3) {
 		printf("%s\n", "fsteg -r <filename>: Tries to read file.");
-		printf("%s\n", "fsteg -w <file name> <\"string>\" <output file name>: Tries to write string to file.");
+		printf("%s\n", "fsteg -w <file name> <\"string\"> <output file name>: Tries to write string to file.");
 		return 0;
 	}
 	
